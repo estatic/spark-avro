@@ -724,7 +724,7 @@ private object AvroTypeInference {
 
       val avroInstance = ctx.freshName("avroObject")
       val avroInstanceJavaType = ctx.javaType(objectInstance.dataType)
-      ctx.addMutableState(avroInstanceJavaType, avroInstance, "")
+      ctx.addMutableState(avroInstanceJavaType, avroInstance)
 
       val initialize = args.map {
         case (posExpr, argExpr) =>
@@ -737,7 +737,7 @@ private object AvroTypeInference {
           """
       }
 
-      val initExpressions = ctx.splitExpressions(ctx.INPUT_ROW, initialize)
+      val initExpressions = ctx.splitExpressions(initialize, "apply", ("InternalRow", ctx.INPUT_ROW) :: Nil)
       val code =
         s"""
           ${instanceGen.code}
